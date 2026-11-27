@@ -136,3 +136,4 @@ system/vold
 test/framework
 toolchain/binutils
 vendor/lineage
+device/lineage/sepolicy

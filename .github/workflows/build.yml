@@ -1,0 +1,17 @@
+name: Build TWRP mcv1s
+on: workflow_dispatch
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - uses: actions/checkout@v4
+      - name: Free disk space
+        run: sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc /opt/hostedtoolcache/CodeQL
+      - name: Build
+        run: docker run --rm -v "$PWD:/kit" -w /kit ubuntu:18.04 bash build.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: twrp-mcv1s-UNTESTED
+          path: twrp-mcv1s-UNTESTED.img
+          if-no-files-found: error

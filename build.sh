@@ -3,7 +3,7 @@
 set -eo pipefail
 export DEBIAN_FRONTEND=noninteractive LC_ALL=C USER=root ALLOW_MISSING_DEPENDENCIES=true
 apt-get update
-apt-get install -y openjdk-8-jdk git curl python python3 bc bison build-essential flex g++-multilib gcc-multilib gnupg gperf lib32ncurses5-dev lib32z1-dev libncurses5 libssl-dev libxml2-utils xsltproc zip unzip zlib1g-dev rsync liblz4-tool ca-certificates schedtool lzop
+apt-get install -y openjdk-8-jdk git curl python python3 bc bison build-essential flex g++-multilib gcc-multilib gnupg gperf lib32ncurses5-dev lib32z1-dev libncurses5 libssl-dev libxml2-utils xsltproc zip unzip zlib1g-dev rsync liblz4-tool ca-certificates schedtool lzop imagemagick
 git config --global user.name build
 git config --global user.email build@localhost
 git config --global color.ui false

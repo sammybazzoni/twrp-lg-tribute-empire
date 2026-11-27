@@ -12,6 +12,7 @@ KIT=$PWD
 mkdir -p /twrp && cd /twrp
 repo init --depth=1 -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_omni.git -b twrp-8.1
 repo sync -c --no-clone-bundle --no-tags -j4
+python3 "$KIT/patch_lg_footer.py" /twrp
 mkdir -p device/lge && cp -r "$KIT/device/lge/mcv1s" device/lge/
 set +e
 source build/envsetup.sh

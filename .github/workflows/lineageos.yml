@@ -1,0 +1,61 @@
+name: Build LineageOS recovery mcv1s
+run-name: LineageOS ${{ (inputs.version == '24.0 (experimental)' || (github.event_name == 'push' && github.ref_name == 'lineageos-24')) && '24.0 (experimental)' || '15.1' }} recovery
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: LineageOS version
+        type: choice
+        options:
+          - '15.1'
+          - '24.0 (experimental)'
+        default: '15.1'
+  push:
+    branches: [lineageos, lineageos-24]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    env:
+      IS24: ${{ inputs.version == '24.0 (experimental)' || (github.event_name == 'push' && github.ref_name == 'lineageos-24') }}
+    steps:
+      # The build files live on the lineageos and lineageos-24 branches.
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'push' && github.sha || (env.IS24 == 'true' && 'lineageos-24' || 'lineageos') }}
+      - name: Free disk space
+        run: |
+          sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc /opt/hostedtoolcache/CodeQL
+          df -h
+      - name: Free more space and add swap (24.0 only)
+        if: env.IS24 == 'true'
+        run: |
+          sudo rm -rf /opt/hostedtoolcache /usr/share/swift /usr/local/.ghcup /usr/local/lib/node_modules
+          sudo docker image prune -af >/dev/null
+          sudo swapoff -a
+          sudo rm -f /swapfile /mnt/swapfile
+          sudo fallocate -l 32G /swapfile-build
+          sudo chmod 600 /swapfile-build
+          sudo mkswap /swapfile-build >/dev/null
+          sudo swapon /swapfile-build
+          free -g
+          df -h
+      - name: Build
+        env:
+          IMAGE: ubuntu:${{ env.IS24 == 'true' && '24.04' || '18.04' }}
+        run: |
+          set -o pipefail
+          docker run --rm -v "$PWD:/kit" -w /kit "$IMAGE" bash build.sh 2>&1 | tee build.log
+      - name: Show errors
+        if: failure()
+        run: python3 ci_errors.py build.log
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.IS24 == 'true' && 'lineage24' || 'lineage15' }}-recovery-mcv1s-UNTESTED
+          path: lineage-recovery-mcv1s-UNTESTED.img
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: build-log
+          path: build.log

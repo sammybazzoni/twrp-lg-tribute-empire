@@ -14,7 +14,10 @@ Keep the original recovery.bin and a full backup, and confirm you can restore.
 
 ## Known limits
 - Never built or booted.
-- No /data decryption support configured.
+- Decryption is stage 1 only: TWRP's crypto code is enabled, but the phone's
+  Trustonic/Keymaster services are not started yet. Do not expect /data to unlock.
+- pack.py removes Python and non-English languages.
+- The kernel has a one-byte patch so touch initializes in recovery.
 - Image may not fit: the kernel needs LZ4, which compresses less than LZMA.
   pack.py deletes any oversized image.
 - Backlight path and SD/USB device paths are assumed, not verified.

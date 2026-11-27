@@ -27,6 +27,8 @@ BOARD_SUPPRESS_SECURE_ERASE := true
 
 # TWRP, trimmed to fit the small ramdisk budget
 TW_THEME := portrait_hdpi
+# Full-disk encryption support (stage 1: compiled in; phone services not wired up yet)
+TW_INCLUDE_CRYPTO := true
 RECOVERY_SDCARD_ON_DATA := true
 TW_BRIGHTNESS_PATH := /sys/class/leds/lcd-backlight/brightness
 TW_MAX_BRIGHTNESS := 255

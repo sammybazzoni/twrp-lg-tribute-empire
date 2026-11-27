@@ -26,3 +26,7 @@ BOARD_SUPPRESS_SECURE_ERASE := true
 
 TARGET_RECOVERY_FSTAB := $(LOCAL_PATH)/recovery.fstab
 TARGET_RECOVERY_DENSITY := xhdpi
+
+# Required by vendor/lineage/bootanimation, even for a recovery-only build
+TARGET_SCREEN_WIDTH := 720
+TARGET_SCREEN_HEIGHT := 1280

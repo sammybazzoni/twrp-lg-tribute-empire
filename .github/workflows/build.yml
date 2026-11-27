@@ -1,5 +1,8 @@
-name: Build TWRP mcv1s
-on: workflow_dispatch
+name: Build LineageOS recovery mcv1s
+on:
+  workflow_dispatch:
+  push:
+    branches: [lineageos]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -7,11 +10,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Free disk space
-        run: sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc /opt/hostedtoolcache/CodeQL
+        run: |
+          sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc /opt/hostedtoolcache/CodeQL
+          df -h
       - name: Build
-        run: docker run --rm -v "$PWD:/kit" -w /kit ubuntu:18.04 bash build.sh
+        run: |
+          set -o pipefail
+          docker run --rm -v "$PWD:/kit" -w /kit ubuntu:18.04 bash build.sh 2>&1 | tee build.log
       - uses: actions/upload-artifact@v4
         with:
-          name: twrp-mcv1s-UNTESTED
-          path: twrp-mcv1s-UNTESTED.img
+          name: lineage-recovery-mcv1s-UNTESTED
+          path: lineage-recovery-mcv1s-UNTESTED.img
           if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: build-log
+          path: build.log

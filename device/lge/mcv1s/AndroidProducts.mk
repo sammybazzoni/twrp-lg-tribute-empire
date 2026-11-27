@@ -1,1 +1,1 @@
-PRODUCT_MAKEFILES := $(LOCAL_DIR)/omni_mcv1s.mk
+PRODUCT_MAKEFILES := $(LOCAL_DIR)/lineage_mcv1s.mk

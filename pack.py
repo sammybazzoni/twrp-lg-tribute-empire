@@ -2,7 +2,7 @@
 """Pack the built ramdisk as legacy LZ4 (the only format this kernel supports)."""
 import subprocess, sys, os
 top = sys.argv[1]
-img = sys.argv[2] if len(sys.argv) > 2 else "twrp-mcv1s-UNTESTED.img"
+img = sys.argv[2] if len(sys.argv) > 2 else "lineage-recovery-mcv1s-UNTESTED.img"
 out = top + "/out/target/product/mcv1s"
 rd = out + "/ramdisk-recovery.lz4"
 

@@ -33,7 +33,11 @@ def trim(path):
 
 cpio = trim(out + "/ramdisk-recovery.cpio")
 subprocess.check_call(["lz4", "-l", "-12", "-f", cpio, rd])
-subprocess.check_call([sys.executable, top + "/system/core/mkbootimg/mkbootimg",
+mkbootimg = next((p for p in (top + "/system/tools/mkbootimg/mkbootimg.py",
+                              top + "/system/core/mkbootimg/mkbootimg") if os.path.exists(p)), None)
+if not mkbootimg:
+    sys.exit("mkbootimg was not found in the source tree.")
+subprocess.check_call([sys.executable, mkbootimg,
     "--kernel", "device/lge/mcv1s/prebuilt/zImage-dtb", "--ramdisk", rd,
     "--base", "0x40000000", "--pagesize", "2048",
     "--kernel_offset", "0x00008000", "--ramdisk_offset", "0x05000000",

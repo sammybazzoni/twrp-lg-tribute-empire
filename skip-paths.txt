@@ -1,0 +1,24 @@
+# Experimental: projects left out to fit a GitHub runner.
+cts$
+pdk$
+platform_testing$
+developers/
+trusty/
+kernel/
+test/
+device/
+!device/lineage/sepolicy$
+!device/generic/common$
+vendor/
+!vendor/lineage$
+packages/apps/
+packages/inputmethods/
+packages/wallpapers/
+packages/screensavers/
+packages/services/Car
+packages/overlays/
+hardware/(qcom|google|nxp|st|samsung|synaptics|telink|ti|knowles|broadcom|sdv)
+!hardware/google/interfaces$
+system/software_defined_vehicle/
+tools/(tradefederation|acloud|aadevtools|deviceinfra|netsim|rootcanal|trebuchet|content_addressed_storage|test/)
+prebuilts/(abi-dumps|android-emulator|cmake|cmdline-tools|devtools|qemu-kernel|clang/kernel|kernel-build-tools|gradle-plugin|maven_repo|checkstyle|ktlint|clang/host/darwin|go/darwin|rust-toolchain/darwin|gcc/linux-x86/host/x86_64-w64)

@@ -1,5 +1,4 @@
-LOCAL_PATH := device/lge/mcv1s
-ALLOW_MISSING_DEPENDENCIES := true
+DEVICE_PATH := device/lge/mcv1s
 
 # Stock userspace is 32-bit ARM
 TARGET_ARCH := arm
@@ -11,22 +10,13 @@ TARGET_BOARD_PLATFORM := mt6750
 TARGET_BOOTLOADER_BOARD_NAME := mcv1s
 TARGET_NO_BOOTLOADER := true
 
-# Prebuilt stock kernel with the one-byte touch fix
-TARGET_PREBUILT_KERNEL := $(LOCAL_PATH)/prebuilt/zImage-dtb
-BOARD_KERNEL_IMAGE_NAME := zImage-dtb
+# Only the recovery ramdisk is built. pack.py adds the stock kernel.
+TARGET_NO_KERNEL := true
 BOARD_KERNEL_CMDLINE := bootopt=64S3,32N2,32N2 androidboot.hardware=mcv1s buildvariant=user
-BOARD_KERNEL_BASE := 0x40000000
-BOARD_KERNEL_PAGESIZE := 2048
-BOARD_MKBOOTIMG_ARGS := --kernel_offset 0x00008000 --ramdisk_offset 0x05000000 --second_offset 0x00f00000 --tags_offset 0x04000000
-
+BOARD_RAMDISK_USE_LZ4 := true
 BOARD_RECOVERYIMAGE_PARTITION_SIZE := 22020096
 BOARD_FLASH_BLOCK_SIZE := 131072
 TARGET_USERIMAGES_USE_EXT4 := true
-BOARD_SUPPRESS_SECURE_ERASE := true
 
-TARGET_RECOVERY_FSTAB := $(LOCAL_PATH)/recovery.fstab
+TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/recovery.fstab
 TARGET_RECOVERY_DENSITY := xhdpi
-
-# Screen size
-TARGET_SCREEN_WIDTH := 720
-TARGET_SCREEN_HEIGHT := 1280

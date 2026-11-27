@@ -33,4 +33,12 @@ and they are not set up yet.
 
 ## LineageOS recovery
 
-The LineageOS 15.1 recovery build is on the `lineageos` branch.
+LineageOS has its own workflow, separate from TWRP:
+Actions tab > "Build LineageOS recovery mcv1s" > Run workflow. Leave "Use
+workflow from" on `main` and pick a version:
+
+- `15.1` builds from the `lineageos` branch. It has built successfully.
+- `24.0 (experimental)` builds from the `lineageos-24` branch. It may not build
+  or boot.
+
+Neither has been tested on the phone. Send the .img for checking before flashing.

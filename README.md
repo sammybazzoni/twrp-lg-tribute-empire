@@ -31,17 +31,6 @@ makes TWRP read that layout. This alone is **not expected to unlock /data**:
 if the phone uses a keymaster KDF, Trustonic services must also run in TWRP,
 and they are not set up yet.
 
-## LineageOS 15.1 recovery (untested, never built)
+## LineageOS recovery
 
-This is a recovery only, not a LineageOS system ROM. Run on a Linux PC with Docker:
-
-    bash lineage/build-lineage.sh /path/to/big/disk/lineage-mcv1s
-
-It downloads the LineageOS 15.1 source and writes
-`lineage-recovery-mcv1s-UNTESTED.img` to this folder. The script asks for
-100 GB free (an estimate, not measured). Re-running reuses the download.
-You may need `sudo` if your user cannot run Docker.
-
-* It has no `/data` decryption.
-* Do **not** use factory reset or any wipe/format option: it erases data.
-* SD card support is untested.
+The LineageOS 15.1 recovery build is on the `lineageos` branch.

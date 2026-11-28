@@ -53,6 +53,16 @@ for ((i = 0; i < ${#PROJECTS[@]}; i += BATCH)); do
   rm -rf .repo/project-objects/* .repo/projects/*
   echo "-- batch $n of $total done, free: $(df --output=avail -BG /lineage | tail -1 | tr -d ' ')"
 done
+# The car services project is skipped, but test labels in hardware/interfaces are
+# defined in its teams/Android.bp. Fetch only that folder.
+echo "downloading the car team labels" > /tmp/stage
+git clone -q --depth 1 --filter=blob:none --no-checkout -b lineage-24.0 https://github.com/LineageOS/android_packages_services_Car /tmp/car-services
+git -C /tmp/car-services sparse-checkout set --no-cone '/teams/'
+git -C /tmp/car-services checkout -q
+mkdir -p packages/services/Car
+cp -r /tmp/car-services/teams packages/services/Car/
+rm -rf /tmp/car-services
+
 echo "== disk after download: $(df -h /lineage | tail -1)"
 echo "== disk, largest folders: $(largest)"
 echo "== memory: $(free -g | awk '/Mem:/{m=$2} /Swap:/{s=$2} END{print m" GB RAM, "s" GB swap"}')"

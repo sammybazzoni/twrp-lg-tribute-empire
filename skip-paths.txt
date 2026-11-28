@@ -4,7 +4,9 @@ pdk$
 platform_testing$
 developers/
 trusty/
+# kernel/configs is kept: hardware/interfaces needs its build rules.
 kernel/
+!kernel/configs$
 test/
 device/
 !device/lineage/sepolicy$

@@ -34,3 +34,6 @@ external/chromiumos-config$
 prebuilts/vndk/
 prebuilts/(runtime|asuite|bazel|checkcolor|extract-tools)
 tools/(rr_prebuilt|loganalysis|ndkports|doc_generation)$
+# Trusty secure-OS kernel (this phone uses Trustonic). Its build file needs a license
+# module that was not found among the downloaded projects.
+external/trusty/lk$

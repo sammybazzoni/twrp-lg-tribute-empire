@@ -7,7 +7,9 @@ trusty/
 # kernel/configs is kept: hardware/interfaces needs its build rules.
 kernel/
 !kernel/configs$
+# test/app_compat/csuite is kept: it defines the csuite_test module type.
 test/
+!test/app_compat/csuite$
 device/
 !device/lineage/sepolicy$
 !device/generic/common$

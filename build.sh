@@ -22,3 +22,8 @@ lunch omni_mcv1s-eng
 mka recoveryimage || echo "build step reported an error; checking for ramdisk"
 test -s out/target/product/mcv1s/ramdisk-recovery.cpio
 cd "$KIT" && python3 pack.py /twrp
+
+# Add the automatic /data unlock. The phone's own Trustonic files are copied at
+# each TWRP startup, so none of them are in this repository or in the image.
+python3 make_auto.py twrp-mcv1s-UNTESTED.img twrp-auto.tmp
+mv twrp-auto.tmp twrp-mcv1s-UNTESTED.img

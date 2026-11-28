@@ -17,13 +17,17 @@ mkdir -p /lineage && cd /lineage
 # Stop before the disk is completely full. A full disk crashes the GitHub runner
 # and no error report survives.
 echo "starting" > /tmp/stage
+largest() {   # one line: the biggest folders, to show where the space went
+  du -x -BG --max-depth=2 /lineage 2>/dev/null | sort -rn | head -n 14 | awk '{sub("/lineage/?","",$2); printf "%s %s; ", ($2 ? $2 : "TOTAL"), $1}'
+}
 (
   while sleep 15; do
     free_gb=$(df --output=avail -BG /lineage | tail -1 | tr -dc '0-9')
     if [ "$free_gb" -lt 4 ]; then
       echo "== disk guard: only ${free_gb} GB free during: $(cat /tmp/stage)"
       echo "BUILD FAILED: the runner is out of disk space during: $(cat /tmp/stage)"
-      touch /tmp/disk-full
+      kill -STOP -1    # pause everything else while measuring
+      echo "== disk guard, largest folders: $(largest)"
       kill -KILL -1    # everything in this container except the main script
       exit 1
     fi
@@ -34,12 +38,23 @@ repo init --depth=1 --git-lfs -u https://github.com/LineageOS/android.git -b lin
 mkdir -p .repo/local_manifests
 repo manifest > /tmp/full-manifest.xml
 python3 "$KIT/trim_manifest.py" /tmp/full-manifest.xml "$KIT/skip-paths.txt" .repo/local_manifests/trim.xml
-echo "downloading source" > /tmp/stage
-repo sync -c --no-clone-bundle --no-tags -j4
+# Download in batches and delete each batch's Git data as soon as its files are
+# unpacked, so the downloads and the unpacked copies never all pile up at once.
+repo manifest > /tmp/trimmed-manifest.xml
+python3 "$KIT/list_projects.py" /tmp/trimmed-manifest.xml > /tmp/projects.txt
+mapfile -t PROJECTS < /tmp/projects.txt
+BATCH=25
+total=$(( (${#PROJECTS[@]} + BATCH - 1) / BATCH ))
+for ((i = 0; i < ${#PROJECTS[@]}; i += BATCH)); do
+  n=$(( i / BATCH + 1 ))
+  echo "downloading source, batch $n of $total, starting at ${PROJECTS[i]}" > /tmp/stage
+  repo sync -c --no-clone-bundle --no-tags -j4 "${PROJECTS[@]:i:BATCH}" ||
+    repo sync -c --no-clone-bundle --no-tags -j2 "${PROJECTS[@]:i:BATCH}"
+  rm -rf .repo/project-objects/* .repo/projects/*
+  echo "-- batch $n of $total done, free: $(df --output=avail -BG /lineage | tail -1 | tr -d ' ')"
+done
 echo "== disk after download: $(df -h /lineage | tail -1)"
-# The source files are unpacked now; the build does not need the Git history.
-rm -rf .repo/project-objects .repo/projects
-echo "== disk after removing Git data: $(df -h /lineage | tail -1)"
+echo "== disk, largest folders: $(largest)"
 echo "== memory: $(free -g | awk '/Mem:/{m=$2} /Swap:/{s=$2} END{print m" GB RAM, "s" GB swap"}')"
 
 mkdir -p device/lge && cp -r "$KIT/device/lge/mcv1s" device/lge/

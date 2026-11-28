@@ -22,3 +22,9 @@ hardware/(qcom|google|nxp|st|samsung|synaptics|telink|ti|knowles|broadcom|sdv)
 system/software_defined_vehicle/
 tools/(tradefederation|acloud|aadevtools|deviceinfra|netsim|rootcanal|trebuchet|content_addressed_storage|test/)
 prebuilts/(abi-dumps|android-emulator|cmake|cmdline-tools|devtools|qemu-kernel|clang/kernel|kernel-build-tools|gradle-plugin|maven_repo|checkstyle|ktlint|clang/host/darwin|go/darwin|rust-toolchain/darwin|gcc/linux-x86/host/x86_64-w64)
+# The web browser engine, old compatibility snapshots and test tools.
+external/chromium-(webview|crossbench|trace|web-tests)
+external/chromiumos-config$
+prebuilts/vndk/
+prebuilts/(runtime|asuite|bazel|checkcolor|extract-tools)
+tools/(rr_prebuilt|loganalysis|ndkports|doc_generation)$

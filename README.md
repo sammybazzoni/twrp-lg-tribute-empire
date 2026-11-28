@@ -23,13 +23,14 @@ Keep the original recovery.bin and a full backup, and confirm you can restore.
 - Backlight path and SD/USB device paths are assumed, not verified.
 - prebuilt/zImage-dtb and init.recovery.mcv1s.rc come from the stock recovery.
 
-## LG encryption header (TWRP, untested on the phone)
+## LG encryption (TWRP, unlock not yet confirmed)
 
-The phone's `vold` uses a 64-byte master key field where AOSP uses 48, so the
-salt, KDF type and keymaster blob sit 16 bytes later. `patch_lg_footer.py`
-makes TWRP read that layout. This alone is **not expected to unlock /data**:
-if the phone uses a keymaster KDF, Trustonic services must also run in TWRP,
-and they are not set up yet.
+`patch_lg_footer.py` makes two changes, both read from the phone's own `vold`:
+the header layout (64-byte master key field) and the key sizes (AES-256 with 48
+bytes of derived key material, where AOSP uses AES-128 and 32).
+
+TWRP also needs the phone's Trustonic service and keymaster library running.
+The build does not start these itself yet.
 
 ## LineageOS recovery
 

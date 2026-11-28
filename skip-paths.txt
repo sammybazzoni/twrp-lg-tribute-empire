@@ -23,6 +23,8 @@ packages/services/Car
 packages/overlays/
 hardware/(qcom|google|nxp|st|samsung|synaptics|telink|ti|knowles|broadcom|sdv)
 !hardware/google/interfaces$
+# hardware/lineage/interfaces refers to a namespace in hardware/google/pixel.
+!hardware/google/pixel$
 system/software_defined_vehicle/
 tools/(tradefederation|acloud|aadevtools|deviceinfra|netsim|rootcanal|trebuchet|content_addressed_storage|test/)
 prebuilts/(abi-dumps|android-emulator|cmake|cmdline-tools|devtools|qemu-kernel|clang/kernel|kernel-build-tools|gradle-plugin|maven_repo|checkstyle|ktlint|clang/host/darwin|go/darwin|rust-toolchain/darwin|gcc/linux-x86/host/x86_64-w64)
